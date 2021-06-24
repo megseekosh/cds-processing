@@ -1,0 +1,470 @@
+---
+title: "acoustic results"
+author: "Meg Cychosz"
+date: "2/11/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE)
+```
+
+```{r, packages}
+library('dplyr')
+library('stringr')
+library('purrr')
+library('tidyr')
+library('phonR')
+```
+
+```{r, read in data}
+# read in coartic data
+coartic_data <- read.csv('7658LT7mosChild_5_minscoartic.csv') %>% 
+  filter(Notes!='IGNORE') %>% # remove words marked to ignore 
+  filter(Notes!='DONTUSE') %>%
+  filter(Notes!='IGNORE (BACKGROUND NOISE)') %>%
+  filter(Notes!='MEG CHECK') %>%
+  filter(Notes!='check') %>%
+  filter(Notes!='check') %>%
+  filter(Notes!='ignore ') %>%
+  filter(Notes!='ignore') %>%
+  filter(Notes!='IGNORE ') %>%
+  filter(Notes!='Check')
+
+# how many timepoints (speakerX3) in the coartic data?
+# there should be 231
+spkrs <- coartic_data %>%
+  distinct(., Speaker) %>%
+  count()
+
+
+# read in descriptive info about vowels (lacking formant measurements)
+# note that the textgrids in this descrip_vowels file differ slightly from the coartic file because changes were made to the textgrids
+# after the descrip_vowels file was created 
+descrip_vowels <- read.csv('/Users/megcychosz/Box/CDS_nonword/analysis/scripts/descrip_vowels.csv') %>%
+  filter(MOTalignedwords !='sp') %>%
+  group_by(spkr, t2_wd) %>%
+  slice(1) %>%
+  mutate(word_t1 = t2_wd - word_duration) %>% # need to create word duration and word_t1 (from 0) variables 
+  select(word_t1, t2_wd, word_duration, MOTalignedwords, spkr, t2_wd)
+
+# read in actual formant measurements
+formants <- read.csv('/Users/megcychosz/Box/CDS_nonword/analysis/scripts/med_formants.csv') %>%
+  select(f1_midpt_med, f2_midpt_med, spkr, MOTalignedwords, MOTalignedphones, t1, t2_ph, next_ph, prev_ph, t2_wd) %>%
+  filter(MOTalignedwords!='sp')
+
+# merge the vowel formant and descriptive vowel data
+vowel_data <- formants %>%
+  merge(., descrip_vowels, by=c("spkr", "t2_wd", "MOTalignedwords")) %>% # this should drop words w/o a, i u, and < 30ms
+  mutate(Speaker = gsub("_.*","", spkr), # create speaker variable
+         Word = MOTalignedwords,
+         Phone = MOTalignedphones,
+         Phone_duration = t2_ph - t1,
+         phone_t1 = t1,
+         word_t2 = t2_wd) %>%
+  select(-MOTalignedwords, -MOTalignedphones, -spkr, -t2_ph, -t1, -t2_wd)
+
+# how many timepoints (speakerX3) in the vowel data?
+# there should be 231
+vowel_spkrs <- vowel_data %>%
+  distinct(., Speaker) %>%
+  count()
+
+```
+
+```{r, remove function words and proper nouns that arent used in coartic or vowel analysis}
+sub_coartic <- coartic_data %>%
+  filter(Word!='gasps' & Word!='alexander' & Word!='alex' & Word!='mackenzie' & Word!='alison' &
+         Word!='i' & Word!='I'& Word!='oh'& Word!='yeah'& Word!='ok'& Word!='is'& Word!='up' & Word!='on'& Word!='it'& Word!='at'
+         & Word!='and'& Word!='the'& Word!='too'& Word!='to'& Word!='about'& Word!='not'& Word!='okay' & Word!='with'& Word!='hi'
+         & Word!='moo'& Word!='quack'& Word!='ribbit'& Word!='but'& Word!='so'& Word!='yup'& Word!='x'& Word!='yay'& Word!='yea'& Word!='ya'
+           & Word!='while'& Word!='uh'& Word!='um'& Word!='stevie'& Word!='or'& Word!='ooh'& Word!='only'& Word!='does'& Word!='over'
+         & Word!='in'& Word!='off'& Word!='of'& Word!='o'& Word!='lucas'& Word!='megan'& Word!='Winnie'& Word!='lily'& Word!='k'
+         & Word!='joe'& Word!='jack'& Word!='it\'s'& Word!='isnt'& Word!='isn\'t'& Word!='isabelle'& Word!='isabel'& Word!='inside'& Word!='into'& Word!='if'& Word!='huh'
+         & Word!='hey'& Word!='from'& Word!='for'& Word!='even'& Word!='by'& Word!='charlie'& Word!='aw'& Word!='are'& Word!='apart'& Word!='any'& Word!='a'& Word!='an'& Word!='ah'& Word !='joey'& Word !='hah'& Word !='phil' & Word!='winnie'& Word !='colbert'& Word !='i\'m'& Word !='ahh'& Word !='<unk'& Word !='69'
+         & Word !='amelia'& Word !='asher'& Word !='c\'mon'& Word !='cuz'& Word !='d\'you'& Word !='dol'& Word !='ella'
+         & Word !='ella\'s'& Word !='ha'& Word !='hiya'& Word !='hm'& Word !='hmm'& Word !='hoo'& Word !='i\'d'
+         & Word !='lisa'& Word !='madeline'& Word !='maddy'& Word !='m&ms'& Word !='mac'& Word !='marcelle'
+         & Word !='meggy'& Word !='micah'& Word !='molly\'s'& Word !='nah'& Word !='nemo'& Word !='om'& Word !='oo'
+         & Word !='ooo'& Word !='oooh'& Word !='oooo'& Word !='oop'& Word !='oops'& Word !='op'& Word !='ow'
+         & Word !='phaedra'& Word !='roo'& Word !='s'& Word !='t\'s'& Word !='tss'& Word !='u'& Word !='ugh'& Word !='umm'
+         & Word !='unk'& Word !='wah'& Word !='william'& Word !='yah'& Word !='ye'& Word !='yep'& Word !='yo'& Word!='ava'
+         & Word!='bambi' & Word!='john'& Word!='lauren'& Word!='lee'
+         & Word!='luke'& Word!='matt'&Word!='dean'& Word!='dean\'s'&Word!='collin'&Word!='gavin'&Word!='francis'&
+         Word!='paul'&Word!='whoa'&Word!='whoop'&Word!='whoops'&Word!='yum'&Word!='yummy'&Word!=' '&Word!='<unk>'&Word!='åå'&Word!='alli'
+         &Word!='archie\'s'&Word!='buh'&Word!='caroline'&Word!='da'&Word!='daniel'&Word!='delia'&Word!='dora'&Word!='dorothy'&Word!='eva'
+         &Word!='erin'&Word!='ew'&Word!='foo'&Word!='frio'&Word!='hmmm'&Word!='hunh'&Word!='jackie'&Word!='kenzie'&Word!='leah'&Word!='lilly'
+         &Word!='maddie'&Word!='max') %>%
+  filter(Word!='how' & Word !='bout'& Word !='baby'& Word !='baby\'s'& Word !='her'& Word !='put'& Word !='go'& Word !='book'& Word !='<unk>'& Word !='get'& Word !=''
+         & Word !='pick'& Word !='take'& Word !='puppy'& Word !='dog'& Word !='otter'& Word !='dude'& Word !='doggies'& Word !='guy'& 
+           Word !='tag'& Word !='took'& Word !='boat'& Word !='technically'
+         & Word !='good'& Word !='table'& Word !='out'& Word !='goodnight'& Word !='toy'& Word !='burger'& Word !='baked'
+         & Word !='cupckae'& Word !='cupcakes'& Word !='cups'& Word !='cup'& Word !='cut'& Word !='da'& Word !='kiddo'& Word !='kit'
+         & Word !='pad'& Word !='takes'& Word !='talk'& Word !='talking'& Word !='tap'& Word !='teddy'& Word !='tick'& Word !='tickly'
+         & Word !='tie'& Word !='tight'& Word !='tipped'&Word!='nathan'&Word!=''&Word!='rachel'&Word!='rosie'&Word!='sala'&Word!='th'&Word!='victor') %>%
+    filter(Word!='') # filter out tokens that weren't aligned (word deleted in textgrid) for whatever reason
+
+sub_vowel <- vowel_data %>%
+  filter(Word!='gasps' & Word!='alexander' & Word!='alex' & Word!='mackenzie' & Word!='i' & Word!='I'& Word!='oh'& Word!='alison' &
+           Word!='yeah'& Word!='ok'& Word!='is'& Word!='up' & Word!='on'& Word!='it'& Word!='at'
+         & Word!='and'& Word!='the'& Word!='too'& Word!='to'& Word!='about'& Word!='not'& Word!='okay' & Word!='with'& Word!='hi'
+         & Word!='moo'& Word!='quack'& Word!='ribbit'& Word!='but'& Word!='so'& Word!='yup'& Word!='x'& Word!='yay'& Word!='yea'& Word!='ya'
+           & Word!='while'& Word!='uh'& Word!='um'& Word!='stevie'& Word!='or'& Word!='ooh'& Word!='only'& Word!='does'& Word!='over'
+         & Word!='in'& Word!='off'& Word!='of'& Word!='o'& Word!='lucas'& Word!='megan'& Word!='Winnie'& Word!='lily'& Word!='k'
+         & Word!='joe'& Word!='jack'& Word!='it\'s'& Word!='isnt'& Word!='isn\'t'& Word!='isabelle'& Word!='isabel'& Word!='inside'& Word!='into'& Word!='if'& Word!='huh'
+         & Word!='hey'& Word!='from'& Word!='for'& Word!='even'& Word!='by'& Word!='charlie'& Word!='aw'& Word!='are'& Word!='apart'& Word!='any'& Word!='a'& Word!='an'& Word!='ah'& Word !='joey'& Word !='hah'& Word !='phil' & Word!='winnie'& Word !='colbert'& Word !='i\'m'& Word !='ahh'& Word !='<unk'& Word !='69'
+         & Word !='amelia'& Word !='asher'& Word !='c\'mon'& Word !='cuz'& Word !='d\'you'& Word !='dol'& Word !='ella'
+         & Word !='ella\'s'& Word !='ha'& Word !='hiya'& Word !='hm'& Word !='hmm'& Word !='hoo'& Word !='i\'d'
+         & Word !='lisa'& Word !='madeline'& Word !='maddy'& Word !='m&ms'& Word !='mac'& Word !='marcelle'
+         & Word !='meggy'& Word !='micah'& Word !='molly\'s'& Word !='nah'& Word !='nemo'& Word !='om'& Word !='oo'
+         & Word !='ooo'& Word !='oooh'& Word !='oooo'& Word !='oop'& Word !='oops'& Word !='op'& Word !='ow'
+         & Word !='phaedra'& Word !='roo'& Word !='s'& Word !='t\'s'& Word !='tss'& Word !='u'& Word !='ugh'& Word !='umm'
+         & Word !='unk'& Word !='wah'& Word !='william'& Word !='yah'& Word !='ye'& Word !='yep'& Word !='yo'& Word!='ava'
+         & Word!='bambi' & Word!='john'& Word!='lauren'& Word!='lee'
+         & Word!='luke'& Word!='matt'&Word!='dean'& Word!='dean\'s'&Word!='collin'&Word!='gavin'&Word!='francis'&
+         Word!='paul'&Word!='whoa'&Word!='whoop'&Word!='whoops'&Word!='yum'&Word!='yummy'&Word!=' '&Word!='<unk>'&Word!='åå'&Word!='alli'
+         &Word!='archie\'s'&Word!='buh'&Word!='caroline'&Word!='da'&Word!='daniel'&Word!='delia'&Word!='dora'&Word!='dorothy'&Word!='eva'
+         &Word!='erin'&Word!='ew'&Word!='foo'&Word!='frio'&Word!='hmmm'&Word!='hunh'&Word!='jackie'&Word!='kenzie'&Word!='leah'&Word!='lilly'
+         &Word!='maddie'&Word!='max') %>%
+  filter(Word!='how' & Word !='bout'& Word !='baby'& Word !='baby\'s'& Word !='her'& Word !='put'& Word !='go'& Word !='book'& Word !='<unk>'& Word !='get'& Word !=''
+         & Word !='pick'& Word !='take'& Word !='puppy'& Word !='dog'& Word !='otter'& Word !='dude'& Word !='doggies'& Word !='guy'& 
+           Word !='tag'& Word !='took'& Word !='boat'& Word !='technically'
+         & Word !='good'& Word !='table'& Word !='out'& Word !='goodnight'& Word !='toy'& Word !='burger'& Word !='baked'
+         & Word !='cupckae'& Word !='cupcakes'& Word !='cups'& Word !='cup'& Word !='cut'& Word !='da'& Word !='kiddo'& Word !='kit'
+         & Word !='pad'& Word !='takes'& Word !='talk'& Word !='talking'& Word !='tap'& Word !='teddy'& Word !='tick'& Word !='tickly'
+         & Word !='tie'& Word !='tight'& Word !='tipped'&Word!='nathan'&Word!=''&Word!='rachel'&Word!='rosie'&Word!='sala'&Word!='th'&Word!='victor') %>%
+    filter(Word!='')  
+```
+
+# Vowel space analysis
+```{r, how many vowel tokens / mother*timepoint}
+# first remove vowels < 30ms
+long_vowels <- sub_vowel %>%
+  filter(Phone_duration >= .030) %>% # shorter vowels got looped in under coarticulation data; remove vowels <30ms 
+  filter(Phone=='UW1' | Phone=='IY1' | Phone=='AA1')
+
+
+vowel_cts <- long_vowels %>%
+  group_by(Speaker, Phone) %>%
+  count()
+
+# what do the counts look like when we remove the word "you"
+noyou <- long_vowels %>%
+  filter(Word!='your' & Word!='Your' & Word!='you' & Word!='You') %>%
+  group_by(Speaker, Phone) %>%
+  count()
+
+sum(vowel_cts$n) #13339
+sum(noyou$n) # 10522
+# one could make the argument that removing you isn't a good idea because it isn't representative of what the child is actually hearing given its frequency
+```
+
+```{r, remove child*timepoints with insufficient vowel tokens}
+# note any kid*timepoint measure for which we don't have 3 measures in each vowel
+vowels1 <- long_vowels %>%
+  select(Speaker, Phone, f1_midpt_med, f2_midpt_med) %>%
+  group_by(Speaker, Phone) %>%
+  add_count() %>%
+  ungroup() %>%
+  distinct_at(., vars(Speaker,Phone), .keep_all = T) #%>%
+  #mutate(vowel_tokens = if_else(n > 2, "sufficient", "insufficient"))
+
+# replace those insufficient formant measures with NA
+vowels2 <- long_vowels %>% 
+  mutate(f1_midpt_med = ifelse((Speaker=="7075MB7mosChild" | 
+                                Speaker=="5609DW7mosChild" | 
+                                Speaker=="4814BS10mosChild" |
+                                Speaker=="5440JJ11mosChild" |
+                                Speaker=="5440JJ7mosChild" |
+                                Speaker=="6206MP24mosChild" |
+                                Speaker=="5936SR7mosChild" |
+                                Speaker=="6206MP10mosChild" |
+                                Speaker=="5540LD7mosChild" |
+                                Speaker=="5550VS7mosChild" |
+                                Speaker=="6337NK11mosChild" |
+                                Speaker=="6453HS10mosChild" |
+                                Speaker=="7553JT7mosChild"), NA, f1_midpt_med)) %>%
+  mutate(f2_midpt_med = ifelse((Speaker=="7075MB7mosChild" | 
+                                Speaker=="5609DW7mosChild" | 
+                                Speaker=="4814BS10mosChild" |
+                                 Speaker=="5440JJ11mosChild" |
+                                Speaker=="5440JJ7mosChild" |
+                                Speaker=="6206MP24mosChild" |
+                                Speaker=="5936SR7mosChild" |
+                                Speaker=="6206MP10mosChild" |
+                                Speaker=="5540LD7mosChild" |
+                                Speaker=="5550VS7mosChild" |
+                                Speaker=="6337NK11mosChild" |
+                                Speaker=="6453HS10mosChild" |
+                                Speaker=="7553JT7mosChild"), NA, f2_midpt_med)) %>%
+  select(Speaker, Phone, Word, f1_midpt_med, f2_midpt_med, word_t2,Phone_duration,word_t1) 
+```
+
+```{r, calculate one vowel space area coefficient per kid per timepoint }
+# there is another option, to calculate distance of each *category* from the center for 3 measures/ timepoint*child
+# but we are only using 1 coarticulation measure/child so might be strange to compare the two 
+vowels2a <- vowels2 %>%
+  filter(f1_midpt_med!='NA') %>% # remove empty formant meas, created when merging with coartic data 
+  group_by(Speaker) %>% # don't group by Phone
+  mutate(norm_f1 = ((f1_midpt_med - mean(f1_midpt_med)) / sd(f1_midpt_med))) %>%
+  mutate(norm_f2 = ((f2_midpt_med - mean(f2_midpt_med)) / sd(f2_midpt_med))) %>%  # first Lobanov-normalize the vowels, to reduce between-participant, anatomically-based variation
+  ungroup() %>% 
+  group_by(Speaker) %>%
+  mutate(Word_duration = word_t2 - word_t1)
+
+vowel_space_stats <- vowels2a %>% # now calculate vowel space area, by child, over word types 
+  group_by(Speaker,Word) %>%
+  mutate(norm_f1 = mean(norm_f1,na.rm=T), # # get the mean of all 'i' segments from each 'cheese', for example
+         norm_f2 = mean(norm_f2,na.rm=T)) %>% 
+  distinct_at(., vars(Speaker, Word), .keep_all = T) %>% # now just get word types 
+  ungroup() %>% 
+  group_by(Speaker) %>% 
+  mutate(vowel_space_area = convexHullArea(norm_f1, norm_f2)) %>%
+  mutate(unnormalized_vowel_space_area = convexHullArea(f1_midpt_med, f2_midpt_med)) %>%
+  select(Speaker, vowel_space_area, unnormalized_vowel_space_area) %>% 
+  distinct_at(., vars(Speaker, vowel_space_area), .keep_all = T)
+
+vowels3 <- vowels2a %>% 
+  merge(., vowel_space_stats, by="Speaker")
+```
+
+# Coarticulation analysis
+```{r, coartic counts, include=FALSE}
+# how many fricative, approximant, affricate, nasal tokens / mother*timepoint
+
+cons_prev <- sub_coartic %>%
+  filter(Phone=='V'|Phone=='F'|Phone=='S'|Phone=='SH'|Phone=='M'|Phone=='F'|
+           Phone=='N'|Phone=='NG'|Phone=='R'|Phone=='JH'|Phone=='L'|Phone=='DH'|
+           Phone=='TH'|Phone=='W'|Phone=='Z'|Phone=='Y'|Phone=='ER0'|Phone=='ZH') %>%
+  filter(Previous=='AA1' | Previous=='AO1' | Previous=='AE1' | Previous=='AH1' | Previous=='AW1' | Previous=='AY1' | Previous=='EH1' | 
+           Previous=='ER1' | Previous=='EY1' | Previous=='IH1' | Previous=='IY1' | Previous=='OW1' | Previous=='OY1' | 
+           Previous=='UH1' | Previous=='UW1')
+
+cons_all <- sub_coartic %>%
+  filter(Phone=='V'|Phone=='F'|Phone=='S'|Phone=='SH'|Phone=='M'|Phone=='F'|
+           Phone=='N'|Phone=='NG'|Phone=='R'|Phone=='JH'|Phone=='L'|Phone=='DH'|
+           Phone=='TH'|Phone=='W'|Phone=='Z'|Phone=='Y'|Phone=='ER0'|Phone=='ZH') %>%
+  filter(Following=='AA1' | Following=='AE1' | Following=='AO1' | Following=='AH1' | Following=='AW1' | Following=='AY1' | Following=='EH1' | 
+           Following=='ER1' | Following=='EY1' | Following=='IH1' | Following=='IY1' | Following=='OW1' | Following=='OY1' | 
+           Following=='UH1' | Following=='UW1') %>%
+  #mutate(Previous=Following) %>%
+  rbind(., cons_prev)
+
+# remove unusable words that didn't get swept up above 
+cons_all2 <- cons_all %>%
+  filter(Word!='apple' & Word!='apples'& Word!='babies'& Word!='because'& Word!='books'& Word!='book\'s'& Word!='buttons'
+         & Word!='buzz'&  Word!='cookies'& Word!='daddy\'s'&  Word!='didn\'t'
+         & Word!='didnt'& Word!='don\'t'& Word!='ducks'& Word!='eaten'& Word!='eating'& Word!='foo'
+         &  Word!='hopping'& Word!='how\'s'& Word!='hunh'& Word!='outfits'& Word!='outside'&  Word!='quot' & Word!='ruff'& Word!='stay'
+         & Word!='sticks'& Word!='topping'& Word!='who'& Word!='back'&Word!='be'&Word!='big')
+
+
+nasal <- cons_all2 %>%
+  filter(Phone=='M' | Phone=='N' | Phone=='NG') %>%
+  mutate(manner = 'nasal')
+
+fric <- cons_all2 %>%
+  filter(Phone=='S' | Phone=='SH' | Phone=='F' | Phone=='V' | Phone=='Z'|Phone=='TH'|Phone=='JH'|Phone=='DH'|Phone=='ZH') %>%
+  mutate(manner = 'fricative')
+
+cons_final <- cons_all2 %>%
+  filter(Phone=='W' | Phone=='R' | Phone=='L'|Phone=='Y'|Phone=='ER0') %>%
+  mutate(manner = 'approx') %>%
+  rbind(., fric) %>%
+  rbind(., nasal)
+
+manner_cts <- cons_final %>%
+  group_by(Speaker, manner) %>%
+  count()
+
+cons_cts <- cons_final %>%
+  group_by(Speaker, Phone) %>%
+  count()
+```
+
+```{r, some addtl cleaning to get right sequences for coarticulation}
+# first some additional cleaning to make sure we only have our target sequences
+
+sub_coartic3 <- sub_coartic %>% # remove some words we know we don't want
+  filter(Word!='apple' & Word!='apples'& Word!='babies'& Word!='because'& Word!='books'& Word!='book\'s'& Word!='buttons'
+         & Word!='buzz'&  Word!='cookies'& Word!='daddy\'s'&  Word!='didn\'t'
+         & Word!='didnt'& Word!='don\'t'& Word!='ducks'& Word!='foo'
+         & Word!='how\'s'& Word!='hunh'& Word!='outfits'& Word!='outside'&  Word!='quot' & Word!='ruff'& Word!='stay'
+         & Word!='sticks'& Word!='back'&Word!='big')
+
+# remove all words that don't contain a *potential* CV sequence
+sub_coartic4 <- sub_coartic3 %>%
+  group_by(Speaker, Word, word_t1) %>%
+  add_count() %>%
+  filter(n >= 2) %>%
+  select(-n) %>%
+  ungroup()
+
+# if there isn't a stressed vowel in previous or following position, remove the row 
+# first create a segment variable
+sub_coartic5 <- sub_coartic4 %>%
+  mutate(Segment=recode(Phone, "AA1"="Vowel", "AO1"="Vowel", 'AE1'="Vowel", 'AH1'="Vowel", 'AW1' ="Vowel", 'AY1'="Vowel", 'EH1'="Vowel",
+                        'ER1'="Vowel", 'EY1'="Vowel", 'IH1' ="Vowel", 'IY1'="Vowel", 'OW1'="Vowel", 'OY1'="Vowel",
+                        'UH1'="Vowel", 'UW1'="Vowel")) %>%
+  mutate(Segment = if_else(Segment=="Vowel", 'Vowel', 'Consonant')) 
+  
+
+sub_coartic6 <- sub_coartic5 %>%
+  mutate(stress=ifelse(Segment=='Consonant', paste(str_sub(Previous,-1,-1),str_sub(Following,-1,-1)), 'Vowel1')) %>% # next create a variable that codes for vowel stress
+  .[grep("1", .$stress),] %>% # delete any row that doesn't contain a '1', indicating that it's not a vowel or it's not a consonant surrounding a stressed vowel 
+  arrange(Speaker, Word, phone_t1) %>%
+  select(-stress) %>%
+  mutate(prev_cons_type=recode(Previous, "NG"="target", "N"="target", "V"="target", "F"="target", "S"="target",
+                          "SH"="target", "M"="target", "R"="target", "ER0"="target", "JH"="target", "L"="target",
+                          "TH"="target", "W"="target", "Z"="target", "CH"="target", "DH"="target", "TH"="target", "Y"="target","Z"="target",
+                          "B"="not", "D"="not", "G"="not", "HH"="not", "K"="not","P"="not", "T"="not", "IH0"="not"," "="not"),
+         foll_cons_type=recode(Following, "NG"="target", "N"="target", "V"="target", "F"="target", "S"="target",
+                          "SH"="target", "M"="target", "R"="target", "ER0"="target", "JH"="target", "L"="target",
+                          "TH"="target", "W"="target", "Z"="target", "CH"="target", "DH"="target", "TH"="target", "Y"="target","Z"="target",
+                          "B"="not", "D"="not", "G"="not", "HH"="not", "K"="not","P"="not", "T"="not", "IH0"="not"," "="not")) %>%
+  mutate(surrounding_cons=paste(prev_cons_type,foll_cons_type)) %>%
+  select(-prev_cons_type, -foll_cons_type) %>% # delete any vowel row that doesn't have an adjacent target consonant
+  filter(surrounding_cons!='not not') %>%
+  select(-surrounding_cons) %>%
+  group_by(Speaker, Word, word_t1)
+
+# make sure that each segment within sequences is at least 20 ms; unreliable acoustics over anything shorter
+sub_coartic6a <- sub_coartic6 %>%
+  group_by(Speaker, Word, word_t1) %>%
+  filter(!any(Phone_duration < .02)) # if any sequence contains a segment < .02, remove the entire sequence 
+  
+# another sanity check
+# each word type should have the same number of rows 
+check <- sub_coartic6a %>%
+  group_by(Speaker, Word, word_t1) %>%
+  add_count() %>%
+  ungroup() %>%
+  distinct_at(., vars(Word, n), .keep_all = T) %>%
+  group_by(Word) %>%
+  count()
+```
+
+```{r, calculate euclidean distances}
+# now that we have the final list of words, calculate euc dist between them
+# convert structure of spectral measurements at edges to something computable
+
+# prepping the data
+# remove brackets
+sub_coartic6a$Spectrum <- gsub( ']', '', sub_coartic6a$Spectrum)
+sub_coartic6a$Spectrum <- gsub( '[ ', '', sub_coartic6a$Spectrum, fixed = TRUE) # open bracket denotes regex so fix it
+
+# convert measurements to string
+sub_coartic6a$variable_sep <- str_extract_all(sub_coartic6a$Spectrum, "[-0-9\\.]+")
+
+# for euclidean distance and raw distance, convert to numeric: 
+sub_coartic6a$spec_vector <- lapply(sub_coartic6a$variable_sep , FUN = as.numeric)
+sub_coartic7 <- sub_coartic6a %>%
+  as.data.frame() %>%
+  select(-variable_sep, -Spectrum)
+
+# the calculations
+if(any(grepl("package:plyr", search()))) detach("package:plyr") else message("plyr not loaded")
+library('dplyr')
+
+# calculate raw difference and euc distance between vectors
+sub_coartic8 <- sub_coartic7 %>% 
+  group_by(Speaker, Word, word_t1) %>% 
+  arrange(phone_t1) %>% # put the phones in chronological order; esp important for speakers with multiple distinct tokens of the same duration
+  #mutate(raw_diff = map2(spec_vector, lead(spec_vector), `-`)) %>% # sanity check (note to take absolute value because the direction of the calculation will differ e.g. aI - K versus t - u)
+  mutate(euc_dist = map2(spec_vector, lead(spec_vector), function(x, y) 
+  sqrt(sum((x-y) ^ 2)))) %>% 
+  as.data.frame() %>%
+  mutate(euc_dist = as.numeric(euc_dist))
+
+sub_coartic8$euc_dist[sub_coartic8$euc_dist == 0] <- NA
+
+
+# there is one remaining error: if the same word 
+# was repeated, and had word-initial stress
+# coartic was measured across word boundary
+# so remove those rows
+sub_coartic9 <- sub_coartic8 %>%
+  filter(! (Word=='orange' & Phone=='JH')) %>%
+  filter(! (Word=='elbows' & Phone=='Z'))
+```
+
+```{r, are there enough of each consonant manner at each timepoint for analysis}
+# need minimum 3 fricatives, 3 approximants, and 3 nasals at each timepoint for analysis, otherwise it's removed
+sub_coartic9a <- sub_coartic9 %>%
+    mutate(Phone=recode(Phone, "s"="S", "JH " = "JH","spDH"="DH", "NN"="N", "spn"="L")) %>%
+    mutate(Consonant_type=recode(Phone, "M"="nasal", "N"="nasal", "NG"="nasal",   # TODO: consider doing separate calculations for voiced and voiceless fricatives 
+                                    "S"="fricative", "SH"="fricative", "F"="fricative", "V"="fricative", 
+                                    "Z"="fricative", "TH"="fricative", "DH"="fricative", "JH"="fricative",
+                                    "CH"="fricative", "W"="approximant", "R"="approximant", "L"="approximant",
+                                     "Y"="approximant", "ER0"="approximant", "ER1"="approximant", "ZH"="fricative")) %>%
+  mutate(Consonant_type = if_else(Segment=="Vowel", 'vowel', Consonant_type)) 
+
+# what's the tpt*manner count?
+manner_cts <- sub_coartic9a %>%
+  filter(Segment!='Vowel') %>%
+  filter(Consonant_type!='RT') %>% 
+  group_by(Speaker,Consonant_type) %>%
+  count()
+
+# two speaker*timepoints had insufficient tokens
+# remove them 
+sub_coartic9b <- sub_coartic9a  %>%
+  filter(Speaker!='5440JJ7mosChild') %>%
+  filter(Speaker!='5440JJ11mosChild')
+```
+
+```{r, give each mom one coarticulation score per timepoint}
+
+# one coartic for fricatives, one for approx, one for nasals
+sub_coartic10 <- sub_coartic9b %>%
+   group_by(Speaker, Word, word_t1) %>%
+   fill(euc_dist, .direction = "down") %>% # fill in NAs with nearest spectral information 
+   filter(Segment!='Vowel') %>% # now vowel rows are redundant so we remove them
+   filter(euc_dist!='NA') %>% 
+   ungroup() 
+
+# first calculate the mean coartic of word tokens so that we make calculations over word types 
+# finally, calculate the average coartic fpr each child*timepoint and add it to the dataframe 
+# this df contains word tokens
+sub_coartic11 <- sub_coartic10 %>%
+  group_by(Speaker,Word,Phone) %>%
+  mutate(euc_dist=mean(euc_dist,na.rm=T)) %>%
+  ungroup() %>% 
+  distinct_at(., vars(Speaker,Word,Phone), .keep_all = T) %>%
+  group_by(Speaker,Consonant_type) %>% 
+  summarize(avg_euc_dist = mean(euc_dist)) %>%
+  ungroup() %>%
+  group_by(Speaker) %>%
+  summarize(final_euc_dist = sum(avg_euc_dist)) %>%
+  merge(., sub_coartic10, by='Speaker') %>%
+  select(final_euc_dist, Speaker, Word, euc_dist, word_t1,Phone,Phone_duration,Word_duration,Consonant_type)
+
+```
+
+```{r, merge our cleaned, normalized vowel data with the cleaned coartic data}
+# sanity checks
+# there should be 229 unique speaker*timepoint in coartic dataset
+final_coartic_ct <- sub_coartic11 %>%
+  distinct(Speaker) %>%
+  NROW()
+# there should be 218 unique speaker*timepoint in vowel dataset 
+final_vls_ct <- vowels3 %>%
+  distinct(Speaker) %>%
+  NROW()
+
+final_acoustic_data <- sub_coartic11 %>%
+  merge(., vowels3, by=c("Speaker","Word","word_t1","Phone","Phone_duration","Word_duration"), all=TRUE) # don't drop speakers or measurements 
+                                            # some words have coartic measure but not vowel and vice versa
+
+# should be 229 unique speaker*timepoint 
+final_ct <- final_acoustic_data %>%
+  distinct(Speaker) %>%
+  NROW()
+```
+
+
+```{r, write out coarticulation measures}
+write.csv(final_acoustic_data, '/Users/megcychosz/Box/CDS_nonword/analysis/data/acoustic_measures.csv')
+```
+
