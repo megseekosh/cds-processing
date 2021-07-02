@@ -23,7 +23,7 @@ code to replicate results in "Acoustic-lexical characteristics of child-directed
 
 `1_acoustic_results.Rmd` - process formant measurements and coarticulatory data; compute vowel space area and degree of coarticulation for each caregiver at each time point; required to generate `acoustic_measures.csv` and run `2_lexical_results.Rmd`
 
-`2_lexical_results.Rmd` - contains code and prose to replicate results section of manuscript, including all tables, figures, and modeling; 
+`2_lexical_results.Rmd` - contains code and prose to replicate results section of manuscript, including all tables, figures, and modeling
 
 `2_lexical_results.pdf` - pdf of results section of manuscript
 
