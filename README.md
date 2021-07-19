@@ -45,6 +45,6 @@ code to replicate results in "Acoustic-lexical characteristics of child-directed
 
 ## Citations
 
-Cychosz, M., Edwards, J., Bernstein Ratner, N., Torrington Eaton, C., & Newman, R. (under review). Acoustic-lexical characteristics of child-directed speech between 7 and 24 months and their impact on toddlers' phonological processing. ([pre-print](https://psyarxiv.com/djkms/))
+Cychosz, M., Edwards, J., Bernstein Ratner, N., Torrington Eaton, C., & Newman, R. (in press). Acoustic-lexical characteristics of child-directed speech between 7 and 24 months and their impact on toddlers' phonological processing. _Frontiers in Psychology: Developmental Psychology_. ([pre-print](https://psyarxiv.com/djkms/))
 
 Vaden, K.I., Halpin, H.R., Hickok, G.S. (2009). Irvine Phonotactic Online Dictionary, Version 2.0. [Data file]. Available from http://www.iphod.com.
