@@ -316,8 +316,10 @@ wd_typesb <- wd_typesa %>%
          & word!='b' & word!='baxter' & word!='billy' & word!='bob' & word!='bobby' & word!='caroline'
          & word!='charlie' & word!='chico' & word!='chloe' & word!='claire' & word!='colin' & word!='coopp'
          & word!='d' & word!='dan' & word!='daniel' & word!='dave' & word!='david' & word!='de'
-         & word!='dean' & word!='devon' & word!='doo' & word!='dorothy' & word!='eh' & word!='eli' & word!='gabby' & word!='dean'
-          & word!='emily' & word!='emma' & word!='erin' & word!='eve' & word!='francis' & word!='fred'& word!='collin'
+         & word!='dean' & word!='devon' & word!='doo' & word!='dorothy' & word!='eh' & word!='eli' & word!='gabby' & word!='dean')
+
+wd_typesc <- wd_typesb %>% 
+          filter(word!='emily' & word!='emma' & word!='erin' & word!='eve' & word!='francis' & word!='fred'& word!='collin'
           & word!='gabby' & word!='george' & word!='hoo' & word!='houser' & word!='isaac' & word!='isabel'
           & word!='jack' & word!='jackie' & word!='joe' & word!='joey' & word!='john' & word!='karen'& word!='mary'
           & word!='katrina' & word!='la' & word!='lee' & word!='leo' & word!='lilly' & word!='lily'& word!='dora'
@@ -336,17 +338,17 @@ wd_typesb <- wd_typesa %>%
          & word!='heddie'& word!='heddies'& word!='i_mean'& word!='isabell'& word!='jessica'& word!='joe_joe'& word!='jess'& word!='jennifer'& word!='jo.jo'& word!='john.thomas'& word!='jo.jo'& word!='jordie'& word!='john.john'& word!='jt'& word!='lee'& word!='lex'& word!='lexi'& word!='lexie'& word!='libby'
          & word!='lia'& word!='lanna'& word!='katie.no.pocket'& word!='kaelyn' & word!='kalin'& word!='sheara'& word!='sherton'& word!='sesame_street'& word!='van_iddison'& word!='victor'& word!='wes'& word!='wesley'& word!='tripp'& word!='shrodie'& word!='shawn'& word!='stacy'& word!='steve'
          & word!='tolly'& word!='tina'& word!='tim'& word!='vincit'& word!='watkins'& word!='sea_world'& word!='scottie'& word!='sela'& word!='ryan'& word!='sabrina'& word!='raina'& word!='reina'& word!='ryan'& word!='allison'& word!='deedee'& word!='elissa'& word!='eggo'& word!='hannah'& word!='heddie'& word!='hailey_bug'
-         & word!='jeffrey'& word!='julie'& word!='kanye'& word!='john.john'& word!='hetty'& word!='kenzie'& word!='lily'& word!='lexie'& word!='kayla_rayla'& word!='lilliana'& word!='lauren'& word!='kimsey'& word!='lisa'& word!='deedee'& word!='hailey_bug'& word!='heddie'& word!='lilly'& word!='katz'& word!='lucas' & word!='lucca'& word!='luce'& word!='lucia'& word!='lucy'& word!='lukie'& word!='lysol'& word!='maddie'& word!='maddy'& word!='madelyn'& word!='madison'& word!='madison'& word!='malia'& word!='marcelle'& word!='mashayla'& word!='max'& word!='mcdonolad'& word!='mckayla_rayla'& word!='md'& word!='megan'& word!='meredith'& word!='michah'
-         & word!='michaela'& word!='mishayla'& word!='miss_devon'& word!='miss_kay'& word!='miss_kayla'& word!='mister_roger'& word!='molls'& word!='molly'& word!='mommom'& word!='mrs_shay'& word!='natalie'& word!='natey'& word!='nath'& word!='nathaniel'& word!='nemo'& word!='nini' & word!='nini'& word!='peeko'& word!='petey'& word!='phaedra'& word!='phineas'& word!='quinn'& word!='quinny'& word!='quinnybear'& word!='rachel'& word!='raina'& word!='samantha'& word!='scott'& word!='sean.ll'& word!='tevas'& word!='u.l'& word!='v'& word!='uma'& word!='z'& word!='zeb'& word!='whinnie'& word!='wesleys' & word!='william'& word!='a_b_c'&  word!='abou'& word!='ah_ha'& word!='aha'& word!='ahahha'& word!='ahum'& word!='aj'& word!='al'& word!='ali'& word!='appy.f'& word!='b.f'& word!='ba.f'& word!='aoif'& word!='lily'& word!='michah'& word!='ararararara'& word!='arounds.f'& word!='bababababababa'& word!='bacchus'& word!='bak'& word!='bak.f' & word!='bak'& word!='baks.f'& word!='bam'& word!='barbie'& word!='bat_bat.f'& word!='blah'& word!='brr'& word!='brrr'& word!='bron'& word!='buh'& word!='buzz'&   word!='bzz'& word!='bzzz'& word!='c.mon'& word!='c.l'& word!='canya'& word!='cha'&  word!='	
-chh'& word!='chomp'& word!='choo.choo'&   word!='cluck.cluck'& word!='cockadoodle'&   word!='coocoo.f'& word!='cooke'& word!='cool.bch'& word!='cshh'& word!='cucu.f'& word!='cyou'& word!='dadadada'& word!='dadada'& word!='ddja'& word!='dede'
+         & word!='jeffrey'& word!='julie'& word!='kanye'& word!='john.john'& word!='hetty'& word!='kenzie'& word!='lily'& word!='lexie'& word!='kayla_rayla'& word!='lilliana'& word!='lauren'& word!='kimsey'& word!='lisa'& word!='deedee'& word!='hailey_bug'& word!='heddie'& word!='lilly'& word!='katz'& word!='lucas' & word!='lucca'& word!='luce'& word!='lucia'& word!='lucy'& word!='lukie'& word!='lysol'& word!='maddie'& word!='maddy'& word!='madelyn'& word!='madison'& word!='madison'& word!='malia'& word!='marcelle'& word!='mashayla'& word!='max'& word!='mcdonolad'& word!='mckayla_rayla'& word!='md'& word!='megan'& word!='meredith'& word!='michah')
+         
+wd_typesd <- wd_typesc %>%          
+         filter(word!='michaela'& word!='mishayla'& word!='miss_devon'& word!='miss_kay'& word!='miss_kayla'& word!='mister_roger'& word!='molls'& word!='molly'& word!='mommom'& word!='mrs_shay'& word!='natalie'& word!='natey'& word!='nath'& word!='nathaniel'& word!='nemo'& word!='nini' & word!='nini'& word!='peeko'& word!='petey'& word!='phaedra'& word!='phineas'& word!='quinn'& word!='quinny'& word!='quinnybear'& word!='rachel'& word!='raina'& word!='samantha'& word!='scott'& word!='sean.ll'& word!='tevas'& word!='u.l'& word!='v'& word!='uma'& word!='z'& word!='zeb'& word!='whinnie'& word!='wesleys' & word!='william'& word!='a_b_c'&  word!='abou'& word!='ah_ha'& word!='aha'& word!='ahahha'& word!='ahum'& word!='aj'& word!='al'& word!='ali'& word!='appy.f'& word!='b.f'& word!='ba.f'& word!='aoif'& word!='lily'& word!='michah'& word!='ararararara'& word!='arounds.f'& word!='bababababababa'& word!='bacchus'& word!='bak'& word!='bak.f' & word!='bak'& word!='baks.f'& word!='bam'& word!='barbie'& word!='bat_bat.f'& word!='blah'& word!='brr'& word!='brrr'& word!='bron'& word!='buh'& word!='buzz'&   word!='bzz'& word!='bzzz'& word!='c.mon'& word!='c.l'& word!='canya'& word!='cha'&  word!='	
+chh'& word!='chomp'& word!='choo.choo'&   word!='cluck.cluck'& word!='cockadoodle'& word!='coocoo.f'& word!='cooke'& word!='cool.bch'& word!='cshh'& word!='cucu.f'& word!='cyou'& word!='dadadada'& word!='dadada'& word!='ddja'& word!='dede'
 & word!='dee'& word!='dipple'& word!='dododo'& word!='donw'&  word!='doop'& word!='duvk'& word!='ee'& word!='eefa'& word!='eek'& word!='elsa'& word!='elsa.n'& word!='emem'& word!='emily'
-& word!='emily'& word!='ewie.f'& word!='f.l'& word!='fifi'& word!='flava.flave'& word!='foosie'& word!='ga'&  word!='goe'& word!='gonn'& word!='grawly'& word!='ha.fr'& word!='gus'& word!='ha_ha_ha'& word!='haa'& word!='han.x'& word!='hee'& word!='he.fr'& word!='hiya.f'& word!='hm.fp'& word!='hm'& word!='hunmmm'& word!='hunny'& word!='ike'& word!='ig' & word!='isabelle'& word!='ish'& word!='jay'& word!='jo'& word!='jumo'& word!='keesh'& word!='ki'& word!='kiesh'& word!='las'& word!='lke'& word!='louser.f'& word!='luca'& word!='m.l'& word!='mac'& word!='macdonald'& word!='macdonald'& word!='margaret'& word!='mashayla'& word!='mcdonalds.'& word!='meggie'& word!='megs'& word!='mema.m'& word!='meow'& word!='mimi'& word!='mmhmm.fp'& word!='mm_mm' & word!='mmm_mmm_mmm'& word!='mmk'& word!='mmmm'& word!='mmmmm'& word!='molly'& word!='moo.q'& word!='moo'& word!='moore'& word!='much.bch'& word!='muches'& word!='mwah'& word!='neigh.neigh'& word!='neigh.niegh'& word!='neigh.q' & word!='neisha'& word!='nu'& word!='nudus.f'& word!='num_num_yum_yum_yum'& word!='num_nums'& word!='numnumnum'& word!='nuv.f'& word!='numnumnumnumnumnum'& word!='e.l'& word!='numnumnumnum'
-& word!=''& word!='blue.clu'& word!='delia'& word!=''& word!='luc'& word!='karen_katz'& word!='mackenzie'& word!='ella'& word!='gigi'& word!='heddi'& word!='character(0)'& word!='kayla'& word!='leah'& word!='paul'& word!='phyll'& word!='sayla'& word!='scarlett'& word!='mckenzie'& word!='mckayla'& word!='sean'& word!='tigger'& word!='w'& word!='watki'& word!='phine'& 
+& word!='emily'& word!='ewie.f'& word!='f.l'& word!='fifi'& word!='flava.flave'& word!='foosie'& word!='ga'&  word!='goe'& word!='gonn'& word!='grawly'& word!='ha.fr'& word!='gus'& word!='ha_ha_ha'& word!='haa'& word!='han.x'& word!='hee'& word!='he.fr'& word!='hiya.f'& word!='hm.fp'& word!='hm'& word!='hunmmm'& word!='hunny'& word!='ike'& word!='ig' & word!='isabelle'& word!='ish'& word!='jay'& word!='jo'& word!='jumo'& word!='keesh'& word!='ki'& word!='kiesh'& word!='las'& word!='lke'& word!='louser.f'& word!='luca'& word!='m.l'& word!='mac'& word!='macdonald'& word!='macdonald'& word!='margaret'& word!='mashayla'& word!='mcdonalds.'& word!='meggie'& word!='megs'& word!='mema.m'& word!='meow'& word!='mimi'& word!='mmhmm.fp'& word!='mm_mm' & word!='mmm_mmm_mmm'& word!='mmk'& word!='mmmm'& word!='mmmmm'& word!='molly'& word!='moo.q'& word!='moo'& word!='moore'& word!='much.bch'& word!='muches'& word!='mwah'& word!='neigh.neigh'& word!='neigh.niegh'& word!='neigh.q' & word!='neisha'& word!='nu'& word!='nudus.f'& word!='num_num_yum_yum_yum'& word!='num_nums'& word!='numnumnum'& word!='nuv.f'& word!='numnumnumnumnumnum'& word!='e.l'& word!='numnumnumnum'& word!='blue.clu'& word!='delia'& word!=''& word!='luc'& word!='karen_katz'& word!='mackenzie'& word!='ella'& word!='gigi'& word!='heddi'&  word!='character(0)'& word!='kayla'& word!='leah'& word!='paul'& word!='phyll'& word!='sayla'& word!='scarlett'& word!='mckenzie'& word!='mckayla'& word!='sean'& word!='tigger'& word!='w'& word!='watki'& word!='phine'& 
   word!='otay.f'& word!='owie.f'& word!='skettie.f'& word!='teefs.f'& word!='toodle.f'& word!='toofies.f'
 & word!='uh.fp'& word!='um.fp'& word!='whoopsie.f'& word!='ouchie.f'& word!='teefers.f'& word!='qwynniebear.f'& word!='qwynnie.f'
 & word!='sketties.f'& word!='roo.f'& 
-  word!='nummy.f'& word!='ac'& word!='kitcat.f'& word!='yummers.f'& word!='cluck'& word!='cockadoodledoo'& word!='elmo'& word!='winnie.the.pooh', word!='winnie.the.poo', word!='jessie',word!='mcdonald',word!='meggy',word!='ahah'&word!='ahh'
-) %>%
+  word!='nummy.f'& word!='ac'& word!='kitcat.f'& word!='yummers.f'& word!='cluck'& word!='cockadoodledoo'& word!='elmo'& word!='winnie.the.pooh' & word!='winnie.the.poo' & word!='jessie' & word!='mcdonald' & word!='meggy' & word!='ahah'&word!='ahh') %>%
     filter(word!='b' & word!='ay' & word!='bock' &  
            word!='c' & word!='d' & word!='e' & word!='f' & # remove erroneous words, misspellings, etc
            word!='h' & word!='jack' & word!='k' & word!='Leo' & 
@@ -371,7 +373,7 @@ chh'& word!='chomp'& word!='choo.choo'&   word!='cluck.cluck'& word!='cockadoodl
           &word!='mhm'&word!='da'&word!='heehee'&word!='mkay'&word!='shh'&word!='ugh'&word!='ooo'&word!='uhuh'
           &word!='ew'&word!='ha'&word!='hah'&word!='uhhuh'&word!='haha'&word!='mmhm'&word!='hmm'&word!='mmm'&word!='ups'&word!='trynna') 
 # clean up some messes
-wd_typesc <- wd_typesb %>%
+wd_typese <- wd_typesd %>%
   mutate(word=recode(word, "aww"="aw","ambulence"="ambulance", "babies."="babies", "buh.bye"="buhbye", "bumbobee"="bumble_bee", "cup_cake"="cupcake",
                      "didja"="did_you", "didya"="did_you", "dinasaurs"="dinosaurs", "dinnner"="dinner", "doneky"="donkey", "dontchu"="dont_you", "doya"="do_ya",
                      "embarassed"="embarrassed", "finsih"="finish", "flys"="flies", "getchu_o"="get_you", "getchya"="get_you", "getchyou"="get_you",
@@ -446,9 +448,9 @@ wd_typesc <- wd_typesb %>%
                      "declicious"="delicious"))
          
 # split words at underscores and add them as new observations
-wd_typesd <- wd_typesc %>%
+wd_typesf <- wd_typese %>%
    mutate(word = strsplit(word, "_")) %>%
-   unnest() %>%
+   unnest(cols=c(word)) %>%
    mutate(word = gsub("\\..*","",word)) %>% # remove .f, .x, and .m from family-specific words we're going to use
    group_by(File,word) %>% 
    mutate(count=sum(count),
@@ -458,7 +460,7 @@ wd_typesd <- wd_typesc %>%
    mutate(word=recode(word, "momma"="mama"))
 
 # some more messes
-wd_types <- wd_typesd %>%
+wd_types <- wd_typesf %>%
   mutate(word=recode(word,"sockie"="socky","theem"="them","aright"="alright")) %>%
   filter(word!='seuss' & word!='seuss.' & word!='pillsbury'& word!='suess'&word!='suesses'
          &word!='eww'&word!='chicka'&word!='chockey'&word!='punxsutawney'&word!='punxsutawney.phil'&
@@ -886,7 +888,7 @@ dur_model_sum <- summary(dur_model)
 coartic_model <- coartic_type_df %>%
    mutate(child_ID = substr(File,1,4),
          merged_tpt = as.factor(merged_tpt)) %>%
-    mutate(merged_tpt = relevel(merged_tpt, ref="1")) %>%
+   mutate(merged_tpt = relevel(merged_tpt, ref="1")) %>%
   lmer(euc_dist_centered ~ merged_tpt + 
                    (1|child_ID),
                  data=.) 
@@ -895,7 +897,7 @@ coartic_model_sum <- summary(coartic_model)
 vowel_model <- vowel_token_df %>%
    mutate(child_ID = substr(File,1,4),
          merged_tpt = as.factor(merged_tpt)) %>%
-    mutate(merged_tpt = relevel(merged_tpt, ref="1")) %>%
+   mutate(merged_tpt = relevel(merged_tpt, ref="1")) %>%
   filter(vowel_space_area!='NA') %>%
   distinct(File, .keep_all = T) %>%
   lmer(vowel_space_area ~ merged_tpt + # no effect of age on unnormalized vowel space areas
@@ -1005,12 +1007,12 @@ token_comp2 <- token_comp$contrasts %>%
   mutate_at(7,round,digits=3) %>%
   mutate(`95% CI`=paste(lower.CL,"-",upper.CL)) %>%
   select(-lower.CL, -upper.CL) %>%
-  rename(`Timepoints (months)`=contrast,
+  rename(`Timepoints (months)`= contrast,
          Estimate=estimate,
          S.E.=SE,
          `t-statistic`=t.ratio,
          `p-value`=p.value) %>%
-  mutate(Timepoints=recode(Timepoints,"1 - 2"="7 - 10/11",
+  mutate(`Timepoints (months)`=recode(`Timepoints (months)`,"1 - 2"="7 - 10/11",
                            "1 - 3"="7 - 18",
                            "2 - 3"="10/11 - 18",
                            "1 - 4"="7 - 24",
@@ -1068,7 +1070,7 @@ phonlength_comp2 <- phonlength_comp$contrasts %>%
          S.E.=SE,
          `t-statistic`=z.ratio,
          `p-value`=p.value) %>%
-  mutate(Timepoints=recode(Timepoints,"1 - 2"="7 - 10/11",
+  mutate(`Timepoints (months)`=recode(`Timepoints (months)`,"1 - 2"="7 - 10/11",
                            "1 - 3"="7 - 18",
                            "2 - 3"="10/11 - 18",
                            "1 - 4"="7 - 24",
@@ -1126,7 +1128,7 @@ vowel_comp <- vowel_model %>%
          S.E.=contrasts.SE,
          `t-statistic`=contrasts.z.ratio,
          `p-value`=contrasts.p.value) %>%
-  mutate(Timepoints=recode(Timepoints,"1 - 2"="7 - 10/11",
+  mutate(`Timepoints (months)`=recode(`Timepoints (months)`,"1 - 2"="7 - 10/11",
                            "1 - 4"="7 - 24",
                            "2 - 4"="10/11 - 24")) %>%
   select(-measure)
@@ -1145,7 +1147,7 @@ knitr::kable(vowel_comp, caption = 'Pairwise comparisons between timepoints for 
 
 Descriptive statistics for the acoustic-lexical CDS measures at 7, 10-11, 18, and 24 months are included in Table \@ref(tab:adult-input-table) and outlined in Figures \@ref(fig:unnested-variables-figure) - \@ref(fig:acoustic-variables-figure)). To evaluate these age-related changes in CDS, we fit a series of linear mixed effects models to predict each CDS measure. Each baseline model included a random intercept of child-caregiver dyad and a fixed effect of timepoint. 
 
-There were significant effects of timepoint for all CDS measures except phonotactic probability, indicating that the input measures changed as children aged. Word type and token count increased significantly between each timepoint sampled, replicating previous work (Rowe, 2012), except 7 to 10-11 months (see Table \@ref(tab:pairwise-compare-lexical) in the Appendices for pairwise comparisons of timepoints). The modeling also demonstrated how lexical statistics of the input changed with child age. For word frequency, there was a significant, negative effect of each timepoint, again except between 7 to 10-11 months, indicating that children heard progressively less frequent, longer words, from sparser neighborhoods, as they aged (pairwise comparisons in Table \@ref(tab:pairwise-compare-phon) in the Appendices).
+There were significant effects of timepoint for all CDS measures except phonotactic probability, indicating that the input measures changed as children aged. Word type and token count increased significantly between each timepoint sampled, replicating previous work (Rowe, 2012), except 7 to 10-11 months (see Table \@ref(tab:pairwise-compare-lexical) in the Appendices for pairwise comparisons of timepoints). The modeling also demonstrated how phono-lexical statistics of the input changed with child age. There was a significant, negative effect of each timepoint and 24 months on the measures, indicating that children heard less frequent, longer words, from sparser neighborhoods, at 24 months than the other points (pairwise comparisons in Table \@ref(tab:pairwise-compare-phon) in the Appendices).
 
 Finally, there were significant changes in the acoustics between 7 and 24 months and 10-11 and 24 months where the speech became significantly faster (7-24 month changes: $\beta$=`r round(dur_model_sum$coefficients[3],2)` t=`r round(dur_model_sum$coefficients[3,4],2)` p<.001), but less coarticulated (7-24 month: $\beta$=`r round(coartic_model_sum$coefficients[3],2)`, t= `r round(coartic_model_sum$coefficients[3,4],2)` p<.001) and produced with a more expanded vowel space (7-24 month: $\beta$= `r round(vowel_model_sum$coefficients[3],2)`, t= `r round(vowel_model_sum$coefficients[3,4],2)`, p=`r round(vowel_model_sum$coefficients[3,5],3)`) (see Table \@ref(tab:pairwise-compare-acoustic) in the Appendices for all pairwise comparisons). Given that vowels tend to reduce, and coarticulation increases, in faster speech, this pattern in the acoustics was somewhat surprising. However, as discussed in the introduction, many lexical statistics covary with acoustic properties so even as parents were speaking faster to their older children, the fact that they were using more diverse, lower-frequency words could explain the relative hyperarticulation in their speech at 24 months. (Again, acoustics were not measured at 18 months.)
 
@@ -1167,11 +1169,12 @@ center_scale <- function(x) {
 
 lm_data <- model_data %>% distinct(child_ID, .keep_all = T) %>% mutate(adj_NW_acc <- adj_NW_acc*100)
 nwr_vocab_m <- lm(adj_NW_acc~MCDI..raw_visit5, data=lm_data) %>% summary()
+nwr_vocab_cor <- cor.test(lm_data$adj_NW_acc,lm_data$MCDI..raw_visit5)
 ```
 
 # Modeling relationships between CDS, phonological processing, and vocabulary size
 
-Having established that the quantity and quality of CDS speech differs by child age, we next evaluated how individual CDS differences explained the children's outcomes (NWR accuracy [i.e. phonological processing] and vocabulary size) at 24 months. Descriptive statistics of the children's outcomes are listed in Table \@ref(tab:child-output-table), including the vocabulary measures at 7, 10, 11, and 18 months. Children varied greatly in performance on the NWR task (28-100% accuracy), and there was a similarly large range of vocabulary sizes at each timepoint sampled (i.e. 62-664 at 24 months). Expressive vocabulary size (MB-CDI) at 24 months is positively correlated with NWR accuracy at the same age ($\beta$=0.0003, p=`r round(nwr_vocab_m$coefficients[8],2)`), corroborating previous work on the relationship between the measures (Hoff et al., 2008; Munson et al., 2005).^[We report on the relationship between NWR and concurrent vocabulary (24 months) measure because only approximately half of the children completed measures at 18 months.]
+Having established that the quantity and quality of CDS speech differs by child age, we next evaluated how individual CDS differences explained the children's outcomes (NWR accuracy [i.e. phonological processing] and vocabulary size) at 24 months. Descriptive statistics of the children's outcomes are listed in Table \@ref(tab:child-output-table), including the vocabulary measures at 7, 10, 11, and 18 months. Children varied greatly in performance on the NWR task (28-100% accuracy), and there was a similarly large range of vocabulary sizes at each timepoint sampled (i.e. 62-664 at 24 months). Expressive vocabulary size (MB-CDI) at 24 months is positively correlated with NWR accuracy at the same age (r=`r round(nwr_vocab_cor$estimate,2)`, p=`r round(nwr_vocab_cor$p.value,2)`), corroborating previous work on the relationship between the measures (Hoff et al., 2008; Munson et al., 2005).^[We report on the relationship between NWR and concurrent vocabulary (24 months) measure because only approximately half of the children completed measures at 18 months.]
 
 ```{r, create table of descriptive stats of kid output measures}
 output_table1 <- model_data %>%
@@ -1206,11 +1209,11 @@ eight_24 <- output_table1 %>%
 
 output_table2 <- output_table1 %>%
   select(vocab_7mos,vocab_10mos,vocab_11mos) %>%
-   mutate(measure='mcdi_recep',
+  mutate(measure='mcdi_recep',
          vocab_18mos='NA',
          `24mos_stats`='NA') %>%
   relocate(measure) %>%
-   mutate_at(vars(2:5), funs(replace(., duplicated(.), NA))) %>%
+  mutate_at(vars(2:5), funs(replace(., duplicated(.), NA))) %>%
   rbind(eight_24) %>%
   select(-measure)
 
@@ -1702,6 +1705,7 @@ freq_m <- slope_data3 %>%
 anova(baseline, freq_m) # improves --- best fit 
 AIC(freq_m) # 1049.077 
 
+
 # we conclude that the effect of word types is mediated by word frequency at 10mos 
 # when I modeled the residuals, neither low frequency word type residuals nor
 # word type count residuals were significant, meaning that the residual analysis
@@ -1712,11 +1716,22 @@ AIC(freq_m) # 1049.077
 
 # get the coefficients for the acoustic mediation model
 
-  
+# types and low-freq words  
 type_freq_10mo <- lm(low_freq_wds~Types, data=slope_data3)
-freq_dur <- lm(Phone_duration_centered*1000~SFreq_centered,data=coartic_type_df)
+
+# acoustic measures
+freq_dur <- coartic_type_df %>%
+            filter(merged_tpt=='2') %>%
+            lm(Phone_duration_centered*1000~
+               SFreq_centered,
+               data=.)
+
 coartic_type_df$Phone_duration_ms_centered <- coartic_type_df$Phone_duration_centered*1000 
-dur_coartic <- lm(euc_dist_centered~Phone_duration_ms_centered,data=coartic_type_df)
+dur_coartic <- coartic_type_df %>%
+            filter(merged_tpt=='2') %>%
+            lm(euc_dist_centered~
+               Phone_duration_ms_centered,
+               data=.)
 ```
 
 ```{r, test nested variables like word frequency and phon. probability on NWR, results='hide'}
@@ -1816,7 +1831,7 @@ testing4 <- PNDfreq_model2 %>%
 
 # we conclude that the effects of word frequency and PND at 18mos on NWR are mediated completely by word length 
 lex_data <- slope_data %>%
-  filter(merged_tpt=='1' & NPhon!='NA')
+  filter(merged_tpt=='3' & NPhon!='NA')
 
 pnd_nphon <-lm(NPhon_centered~strDENS, data=lex_data)
 freq_nphon <- lm(NPhon_centered~SFreq_centered, data=lex_data)
@@ -2068,7 +2083,7 @@ types_nwr <- slope_data %>%
   filter(merged_tpt=='3') %>%
   distinct(File, .keep_all = T) %>% 
   lm(adj_NW_acc*100  ~ Types +
-                  MCDI_visit4_raw,
+                  MCDI_visit4_raw + 
                   mated, 
                   data=.)
 
@@ -2196,11 +2211,12 @@ grid.arrange(types_m,nphon_m,coartic_m,
 
 
 ```{r, nwr-acoustic-model}
+
 coartic_type_df %>%
   filter(merged_tpt=='2' & euc_dist_centered!='NA') %>% 
   lm(adj_NW_acc*100  ~ euc_dist_centered +
                   Phone_duration_centered + 
-                  MCDI_visit4_raw + 
+                  MCDI..10.11.mos_visit3_understands + 
                   mated,
                   data=.) %>%
   stargazer(., header=FALSE, 
@@ -2265,18 +2281,18 @@ stargazer(., header=FALSE,
 
 We next wanted to evaluate the contributions of Word Frequency and Number of Word Types at 18 months on children's vocabulary sizes at 24 months. To compare nested and unnested variables, we followed the same steps previously outlined: first, we calculated the median frequency of all word types produced by all caregivers at 18 months. Then, we calculated the number of words below the word frequency median that the caregiver produced. The result was an unnested parameter, Number of Low Frequency Words, that we compared to the unnested parameter Number of Word Types by regressing out the effect of each variable on the other and modeling the ensuing residuals. 
 
-We found significant effects of Number of Word Types residuals in a model with that variable and Number of Low Frequency Words, but did not find an effect of Number of Low Frequency words residuals in a model with that variable and Number of Word Types. This result led us to conclude that the Number of Word Types is the most relevant predictor of children's vocabulary outcomes: word frequency is only predictive in that if caregivers use more diverse words, they will, necessarily, eventually use words with lower statistical frequency in English (Table \@ref(tab:vocab-lexical-18mo-model); Figure \@ref(fig:nwr-lexical-18mo-figure)). Note that this conclusion about Word Frequency only held in our models of input at 18 months. At 7 and 10 months, we found that _both_ Number of Low Frequency Words and Number of Word Types, together, significantly predicted the children's vocabulary outcomes at 24 months (see Supplementary Materials for model summaries and mediation plots from 7 and 10 months). 
+We found significant effects of Number of Word Types residuals in a model with that variable and Number of Low Frequency Words, but did not find an effect of Number of Low Frequency words residuals in a model with that variable and Number of Word Types. This result led us to conclude that the Number of Word Types is the most relevant predictor of children's vocabulary outcomes: word frequency is only predictive in that if caregivers use more diverse words, they will, necessarily, eventually use words with lower statistical frequency in English (Table \@ref(tab:vocab-lexical-18mo-model); Figure \@ref(fig:nwr-lexical-18mo-figure)).  
 
 ```{r, vocab-acoustic-model}
 coartic_10mo <- coartic_type_df %>%
   filter(merged_tpt=='2'& SFreq_centered!='NA') %>%
-  lm(MCDI..raw_visit5 ~ #euc_dist_centered + 
+  lm(MCDI..raw_visit5 ~ euc_dist_centered + 
                   Phone_duration_centered + 
                   Gender + 
                   mated, 
                   data=.) 
 
-freq_10mo <- coartic_type_df %>%
+freq_10mo <- slope_data %>%
   filter(merged_tpt=='2'& SFreq_centered!='NA') %>%
   lm(MCDI..raw_visit5 ~ SFreq_centered +
                   Gender + 
@@ -2313,7 +2329,8 @@ freq_7mo <- slope_data %>%
   lm(adj_NW_acc*100 ~ SFreq_centered + 
                   MCDI..7.months_visit1_understands +
                   mated,
-                  data=.) 
+                  data=.)
+
 nphon_7mo <- slope_data %>%
   filter(NPhon_centered!='NA') %>%
   filter(merged_tpt=='1') %>% 
@@ -2340,14 +2357,6 @@ stargazer(freq_7mo, nphon_7mo,
 ```
 
 ```{r, vocab-lexical-10mo-model}
-types_10mo <- slope_data %>%
-  distinct(File, .keep_all = T) %>% 
-  filter(merged_tpt=='2') %>%
-  lm(MCDI..raw_visit5 ~ Types +
-                  Gender + 
-                  mated, 
-                  data=.)
-
 freq_10mo <- slope_data %>%
   filter(merged_tpt=='2') %>%
   lm(MCDI..raw_visit5 ~ SFreq_centered + 
@@ -2355,8 +2364,8 @@ freq_10mo <- slope_data %>%
                   mated,
                   data=.) 
 
-stargazer(types_10mo, freq_10mo, 
-            panel.names = c("Word types","Word frequency"),
+stargazer(freq_10mo, 
+            panel.names = c("Word frequency"),
             #header=FALSE, 
             dep.var.caption = "", 
             dep.var.labels.include = FALSE,  
@@ -2368,8 +2377,8 @@ stargazer(types_10mo, freq_10mo,
             digits = 2, 
             ci = TRUE, 
             style = "all",
-            order=c(5,1,2,3,4),
-            covariate.labels = c("Intercept", "Word types","Word frequency", "Gender:male", "Mat. Ed."))
+            order=c(4,1,2,3),
+            covariate.labels = c("Intercept","Word frequency", "Gender:male", "Mat. Ed."))
 ```
 
 ```{r, vocab-lexical-7mo-model}
